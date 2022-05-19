@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'painter.dart';
@@ -68,6 +69,10 @@ class _SpeedometerState extends State<Speedometer> {
               (maxValue - minValue)) +
           startAngle2;
     }
+
+    double angle = math.pi / 12 * kimAngle;
+    double oldAngle = 0.0;
+    double angleDelta = 0.0;
     return Container(
       color: widget.backgroundColor,
       child: Center(
@@ -148,13 +153,33 @@ class _SpeedometerState extends State<Speedometer> {
                 Container(
                   alignment: Alignment.center,
                   child: Transform.rotate(
-                    angle: math.pi / 12 * kimAngle,
+                    angle: angle,
                     child: ClipPath(
                       clipper: KimClipper(),
-                      child: Container(
-                        width: size * 0.9,
-                        height: size * 0.9,
-                        color: widget.kimColor,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        /* onPanStart: (details) {
+                        final touchPositionFromCenter =
+                            details.localPosition - centerOfGestureDetector;
+                        angleDelta =
+                            oldAngle - touchPositionFromCenter.direction;
+                      },
+                      onPanEnd: (details) {
+                        setState(
+                          () {
+                            oldAngle = angle;
+                          },
+                        );
+                      }, */
+                        onPanUpdate: (details) => setState(() {
+                          angle = angle - details.localPosition.direction;
+                          log(angle.toString());
+                        }),
+                        child: Container(
+                          width: size * 0.9,
+                          height: size * 0.9,
+                          color: widget.kimColor,
+                        ),
                       ),
                     ),
                   ),
