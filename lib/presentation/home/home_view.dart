@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:moodometer/presentation/shared/speedometer/speedometer.dart';
+import 'package:moodometer/presentation/home/widgets/custom_appearance.dart';
+import 'package:moodometer/presentation/home/widgets/mood_page.dart';
+//import 'package:moodometer/presentation/shared/speedometer/speedometer.dart';
+//import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -7,6 +10,44 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+
+CircularSliderAppearance customappearance = CircularSliderAppearance(
+  size: 300.0,
+  infoProperties: InfoProperties(
+      bottomLabelStyle: const TextStyle(fontSize: 20),
+      bottomLabelText:
+          '' /* viewModel.value <= 10
+        ? '😭'
+        : viewModel.value <= 20
+            ? '😢'
+            : viewModel.value <= 30
+                ? '😐'
+                : viewModel.value <= 40
+                    ? '😊'
+                    : viewModel.value <= 50
+                        ? '😄'
+                        : viewModel.value <= 60
+                            ? '😁'
+                            : viewModel.value <= 70
+                                ? '😀'
+                                : viewModel.value <= 80
+                                    ? '😃'
+                                    : viewModel.value <= 90
+                                        ? '😆'
+                                        : '😡', */
+      ),
+);
+final viewModel = MoodViewModel(
+  appearance: customappearance,
+  min: 0,
+  max: 100,
+  value: 60,
+  pageColors: [Colors.white, const Color(0xFFE1C3FF)],
+  //innerWidget: ,
+);
+final MoodSlider = MoodPage(
+  viewModel: viewModel,
+);
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -22,7 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
       ),
       body: Center(
-        child: Speedometer(
+        child: MoodSlider,
+      ),
+    );
+  }
+}
+//🙂, 😃, 😱, 🥳, 😡,
+
+/* Speedometer(
           minValue: 0,
           maxValue: 100,
           currentValue: currentValue,
@@ -45,9 +93,4 @@ class _HomeScreenState extends State<HomeScreen> {
                                           : currentValue <= 90
                                               ? '😆'
                                               : '😡',
-        ),
-      ),
-    );
-  }
-}
-//🙂, 😃, 😱, 🥳, 😡,
+        ), */
