@@ -53,12 +53,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    int currentValue = 100;
+    //int currentValue = 100;
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
       appBar: AppBar(
-        title: const Text('Mood-O-Meter'),
+        title: Center(child: Image.asset('assets/Logo_white.png')),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
