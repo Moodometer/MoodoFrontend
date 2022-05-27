@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_widgetkit/flutter_widgetkit.dart';
+import '../../../native_widgets/widget_data.dart';
 import 'custom_appearance.dart';
 
 class SliderLabel extends StatelessWidget {
@@ -24,6 +28,12 @@ class SliderLabel extends StatelessWidget {
       ));
     }
     final modifier = appearance.infoModifier(value);
+
+    //TODO: Test implementation of Widget
+    WidgetKit.setItem('widgetData', jsonEncode(WidgetData(modifier)),
+        'group.app.moodometer.widgetGroup');
+    WidgetKit.reloadAllTimelines();
+
     widgets.add(
       Text(modifier, style: appearance.infoMainLabelStyle),
     );
