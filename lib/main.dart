@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moodometer/presentation/home/home_view.dart';
+import 'package:moodometer/presentation/views/home_view.dart';
 
 void main() {
   runApp(const MyApp());
