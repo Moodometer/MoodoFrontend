@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moodometer/presentation/home/widgets/custom_appearance.dart';
 import 'package:moodometer/presentation/home/widgets/mood_page.dart';
+import 'package:uni_links/uni_links.dart';
 //import 'package:moodometer/presentation/shared/speedometer/speedometer.dart';
 //import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -50,6 +52,29 @@ final MoodSlider = MoodPage(
 );
 
 class _HomeScreenState extends State<HomeScreen> {
+  var url = "None";
+
+  Future<void> initUniLinks() async {
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      final initialLink = await getInitialLink();
+      setState(() {
+        url = initialLink ?? "none";
+      });
+      // Parse the link and warn the user, if it is not correct,
+      // but keep in mind it could be `null`.
+    } on PlatformException {
+      // Handle exception by warning the user their action did not succeed
+      // return?
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initUniLinks();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -63,7 +88,11 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
       ),
       body: Center(
-        child: MoodSlider,
+        child: Row(
+          children: [
+            Text("URL: ${url}"),
+          ],
+        ),
       ),
     );
   }

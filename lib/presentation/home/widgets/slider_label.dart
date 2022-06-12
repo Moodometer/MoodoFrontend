@@ -30,7 +30,14 @@ class SliderLabel extends StatelessWidget {
     final modifier = appearance.infoModifier(value);
 
     //TODO: Test implementation of Widget
-    WidgetKit.setItem('widgetData', jsonEncode(WidgetData(modifier)),
+    WidgetKit.setItem(
+        'widgetData',
+        jsonEncode([
+          WidgetData(modifier),
+          WidgetData(appearance.infoModifier(10)),
+          WidgetData(appearance.infoModifier(99)),
+          WidgetData(appearance.infoModifier(50))
+        ]),
         'group.app.moodometer.widgetGroup');
     WidgetKit.reloadAllTimelines();
 
