@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moodometer/constants/enums.dart';
+import 'package:moodometer/data/models/user.model.dart';
+import 'package:moodometer/logic/cubit/internet_cubit.dart';
+import 'package:moodometer/logic/homebloc/home_bloc.dart';
 import 'package:moodometer/presentation/home/widgets/custom_appearance.dart';
 import 'package:moodometer/presentation/home/widgets/mood_page.dart';
 //import 'package:moodometer/presentation/shared/speedometer/speedometer.dart';
@@ -46,6 +51,7 @@ final viewModel = MoodViewModel(
   //innerWidget: ,
 );
 final MoodSlider = MoodPage(
+  user: UserModel(id: 0, deviceId: '', phonenumber: '', mood: 0),
   viewModel: viewModel,
 );
 
@@ -62,8 +68,38 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Center(
-        child: MoodSlider,
+      body: Builder(
+        builder: (blocContext) {
+          var internetState = context.watch<InternetCubit>().state;
+          print(internetState);
+          if (internetState is InternetConnected &&
+                  internetState.connectionType == ConnectionType.Wifi ||
+              internetState is InternetConnected &&
+                  internetState.connectionType == ConnectionType.Mobile) {
+            context.read<HomeBloc>().add(DataRequestEvent());
+            return Builder(
+              builder: ((context) {
+                final homeState = context.watch<HomeBloc>().state;
+                if (homeState is HomeStateLoaded) {
+                  return Center(
+                    child: MoodSlider,
+                  );
+                } else if (homeState is HomeStateError) {
+                  return Center(
+                    child: Text(homeState.errorMessage),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
+            );
+          } else if (internetState is InternetDisconnected) {
+            return const Text('Keine Internetverbindung.');
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }

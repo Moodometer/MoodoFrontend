@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moodometer/data/models/user.model.dart';
 import 'package:moodometer/presentation/home/widgets/circular_slider.dart';
 import 'package:moodometer/presentation/home/widgets/custom_appearance.dart';
 
@@ -21,9 +22,11 @@ class MoodViewModel {
 
 class MoodPage extends StatelessWidget {
   final MoodViewModel viewModel;
+  final UserModel user;
   const MoodPage({
     Key? key,
     required this.viewModel,
+    required this.user,
   }) : super(key: key);
 
   @override
@@ -45,7 +48,8 @@ class MoodPage extends StatelessWidget {
             appearance: viewModel.appearance,
             min: viewModel.min,
             max: viewModel.max,
-            initialValue: viewModel.value,
+            initialValue:
+                user.mood > 0 ? user.mood.toDouble() : viewModel.value,
           )),
         ),
       ),
